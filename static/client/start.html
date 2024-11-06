@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Together</title>
+</head>
+<style>
+    @font-face {
+        font-family: 'MinSans-Regular';
+        src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/MinSans-Regular.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    * {
+        font-family: 'MinSans-Regular';
+        margin: 0 auto;
+    }
+
+    body {
+        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+        min-height: 100vh;
+    }
+
+    @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    nav {
+        background-color: rgba(0, 0, 0, 0.8);
+        color: rgb(255, 255, 255);
+        height: 40px;
+    }
+
+    nav>p {
+        line-height: 40px;
+        margin-left: 20px;
+        text-align: left;
+    }
+
+    .home>li {
+        text-align: right;
+    }
+
+    .home>a {
+        color: rgb(255, 129, 129);
+    }
+    .welcome {
+        margin-top: 200px;
+        text-align: center;
+        font-size: 4em;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .welcome>p {
+        font-size: 0.8em;
+    }
+    .main{
+        text-align: center;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    button {
+        font-size: 1.5em;
+        margin-top: 50px;
+        display:block;
+        align-items: center;
+        text-align: center;
+        width: 200px;
+        height: 50px;
+        background-color: rgba(150, 150, 150, 0.3);
+        border: 1px solid white;
+        border-radius: 10px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: scale(1.05);
+    }
+
+    @media screen and (max-width: 1000px){
+        .container{
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            bottom: 100px;
+        }
+    }
+</style>
+
+<body>
+    <nav>
+        <p class="home">
+            Together WEB - <a>연결 시도중</a>
+        </p>
+    </nav>
+    <div class="container">
+        <div class="welcome">
+            🖐️<br>
+            <p>Together</p>
+        </div>
+    <div class="main">
+        반가워요!
+    </div>
+    <button onclick="window.location.replace('./decorate.html')">
+        시작하기
+    </button>
+</div>
+</body>
+
+<script>
+    fetch('/gateway/', {
+        credentials: 'include'
+    })
+        .then(response => {
+            if (response.ok) {
+                const anchor = document.querySelector('.home > a');
+                anchor.style.color = 'green';
+                anchor.textContent = '서비스 서버 연결됨';
+            } else {
+                console.error('서버 연결 실패');
+            }
+        })
+        .catch(error => {
+            const anchor = document.querySelector('.home > a');
+            anchor.style.color = 'red';
+            anchor.textContent = 'NANU-JP2 연결 실패';
+        });
+</script>
+
+</html>

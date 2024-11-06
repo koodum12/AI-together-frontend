@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Together</title>
+</head>
+<style>
+@font-face {
+    font-family: 'MinSans-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/MinSans-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    font-family: 'MinSans-Regular';
+    margin: 0 auto;
+    color: white;
+}
+
+body {
+    transition: all 0.5s ease-in-out;
+    background-color: black;
+}
+
+.fade-out {
+    animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+nav {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    height: 40px;
+}
+
+nav>p {
+    line-height: 40px;
+    margin-left: 20px;
+    text-align: left;
+}
+
+.home>li {
+    text-align: right;
+}
+
+.home>a {
+    color: rgb(255, 129, 129);
+}
+
+.welcome {
+    margin: 0;
+    text-align: center;
+    font-size: 3em;
+}
+
+.welcome>p {
+    font-size: 0.8em;
+    margin: 0 0;
+}
+
+.main {
+    text-align: center;
+    margin: 0;
+    background-color: black;
+}
+
+button {
+    font-family: 'MinSans-Regular';
+    font-size: 1.8em;
+    margin-top: 20px;
+    display: block;
+    align-items: center;
+    text-align: center;
+    width: 280px;
+    height: 70px;
+    border-radius: 35px;
+    background-color: rgb(255, 85, 85);
+    border: none;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
+    background-color: rgb(255, 100, 100);
+}
+
+.camera-box {
+    margin: 0;
+    height: 70vh;
+    transform: scale(-1, 1);
+}
+
+.ping {
+    color: rgb(80, 80, 80);
+}
+
+.photo-count {
+    font-size: 2em;
+}
+
+.container {
+    position: relative;
+    padding: 20px;
+}
+
+#info {
+    margin-bottom: 20px;
+}
+
+@media screen and (max-width: 1000px) {
+    .main{
+        display: none;
+    }
+    .container {
+        padding: 10px;
+    }
+
+    .main {
+        display: none;
+    }
+
+    button {
+        font-family: 'pretandard-regular';
+        width: 90%;
+        max-width: 400px;
+        height: 100px;
+        font-size: 2.5em;
+        margin-top: 50vh;
+        transform: translateY(-50%);
+        border-radius: 50px;
+        background-color: rgb(74, 74, 74);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    button p{
+        margin-bottom: 20px;
+    }
+
+    button:hover {
+        background-color: rgb(255, 100, 100);
+    }
+
+    .welcome {
+        font-size: 2.5em;
+    }
+
+    #info {
+        margin-bottom: 10px;
+    }
+
+    .explain , nav , .ping{
+        display: none;
+    }
+    .welcome{
+        margin-top: 40px;
+    }
+}
+</style>
+
+<body id="body">
+    
+    <nav>
+        <p class="home">
+            Together WEB - <a>연결 시도중<a>
+            </p>
+        </nav>
+        <div class="explain">Client v3. Server Ping</div><a class="ping">--</a>
+        <div class="container">
+            <div class="welcome">
+                <p id="info" style="font-size: 0.4em;"><a class="photo-count">0</a>장 남았습니다</p>
+            </div>
+            <div class="main">
+                <video class="camera-box" autoplay></video>
+            </div>
+            <button id="recordBtn">
+                <p>📷</p>
+            </button>
+        </div>
+        </body>
+        
+        </html>
+        <script>
+    
+    var pic_count = 10;
+    const picAnchor = document.querySelector('.photo-count');
+    const body = document.querySelector('body');
+    picAnchor.textContent = pic_count;
+
+    // 현 사진의 이미지셋 번호 지정
+    const expires = new Date();
+    const value = Math.floor(10000 + Math.random() * 90000);
+    const name = 'PicID';
+    document.cookie = `${name}=${value};expires=0;path=/`;
+
+    // API 호출
+    fetch('/gateway')
+        .then(response => response.json())
+        .then(data => {
+            const pingValue = (Date.now() - data.ping) / 10; // 응답 시간(ms)
+            const pingElement = document.querySelector('.ping');
+            pingElement.textContent = `${pingValue}ms`;
+        })
+        .catch(error => {
+            console.log('API 호출 중 오류 발생:', error);
+        });
+
+    fetch('/gateway', {
+        credentials: 'include'
+    })
+        .then(response => {
+            if (response.ok) {
+                const anchor = document.querySelector('.home > a');
+                anchor.style.color = 'green';
+                anchor.textContent = '서비스 서버 연결됨';
+            } else {
+                console.error('서버 연결 실패');
+            }
+        })
+        .catch(error => {
+            const anchor = document.querySelector('.home > a');
+            anchor.style.color = 'red';
+            anchor.textContent = 'NANU-JP2 연결 실패';
+        });
+
+    let mediaRecorder;
+    let recordedChunks = [];
+
+    const videoElement = document.querySelector('video');
+    const recordButton = document.getElementById('recordBtn');
+    let capture_on = true;
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            videoElement.srcObject = stream;
+
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = event => {
+                if (event.data.size > 0) {
+                    recordedChunks.push(event.data);
+                }
+            };
+
+            mediaRecorder.onstop = () => {
+                capture_on = false;
+                const blob = new Blob(recordedChunks, {
+                    type: 'video/mp4'
+                });
+                recordedChunks = [];
+                uploadVideo(blob);
+                picAnchor.style.color = 'white';
+                picAnchor.textContent = pic_count;
+
+                if (pic_count === 0) {
+                    document.body.classList.add('fade-out'); // 페이드 아웃 애니메이션 클래스 추가
+                    setTimeout(function () {
+                        location.href = './photo-select.html'; // 다음 페이지로 이동
+                    }, 1000); // 애니메이션 완료 후 1초 뒤에 페이지 전환
+                }
+            };
+            mediaRecorder.start();
+        })
+        .catch(error => {
+            const anchor = document.querySelector('.home > a');
+            console.error('미디어 디바이스 접속 중 오류 발생', error);
+            anchor.style.color = 'red';
+            anchor.textContent = '카메라 오류 발생!';
+        });
+
+    recordButton.addEventListener('click', startRecording);
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key == 'Enter') {
+            if (capture_on) {
+                startRecording();
+            }
+        }
+    });
+
+    function startRecording() {
+        body.style.backgroundColor = 'white';
+        recordButton.style.display = 'none';
+        captureImage();
+        mediaRecorder.stop(); //영상 중지
+
+        pic_count--;
+
+        picAnchor.style.color = 'white';
+        picAnchor.textContent = pic_count; 
+        setTimeout(() => {
+            body.style.backgroundColor = 'black';
+        }, 1000);
+    }
+    function captureImage() {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+
+        context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+        canvas.toBlob(blob => {
+            uploadImage(blob);
+        }, 'image/png');
+    }
+
+    function uploadImage(blob) {
+        const formData = new FormData();
+        formData.append('image', blob, `${pic_count}-img.png`);
+
+        fetch('/gateway/media/image', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Image uploaded successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error uploading image:', error);
+            });
+    }
+
+    function uploadVideo(blob) {
+        const formData = new FormData();
+        formData.append('video', blob, `${pic_count}-vid.mp4`);
+        // GateWay API에 촬영한 영상 업로드
+        fetch('/gateway/media/upload', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Video uploaded successfully:', data);
+                capture_on = true;
+                recordButton.style.display = 'block';
+                mediaRecorder.start();
+            })
+            .catch(error => {
+                console.error('Error uploading video:', error);
+            });
+    }
+</script>

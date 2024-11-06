@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Together</title>
+</head>
+<style>
+    @font-face {
+        font-family: 'MinSans-Regular';
+        src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/MinSans-Regular.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    * {
+        font-family: 'MinSans-Regular';
+        margin: 0 auto;
+    }
+
+    body {
+        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+        min-height: 100vh;
+    }
+
+    @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    nav {
+        background-color: rgb(0, 0, 0);
+        color: rgb(255, 255, 255);
+        height: 40px;
+    }
+
+    nav>p {
+        line-height: 40px;
+        margin-left: 20px;
+        text-align: left;
+    }
+
+    .home>li {
+        text-align: right;
+    }
+
+    .home>a {
+        color: rgb(255, 129, 129);
+    }
+
+    .welcome {
+        text-align: center;
+        font-size: 2em;
+        margin-top: 20px;
+        margin-left: 300px;
+        font-weight: 700;
+    }
+
+    .welcome>p {
+        font-size: 0.8em;
+
+    }
+
+    .main {
+        text-align: center;
+        margin-left: 300px;
+        font-weight: 400;
+    }
+
+    .main a{
+        color: white    ;
+    }
+
+    button {
+        font-family: 'Pretendard-Regular';
+        font-size: 1.2em;
+        font-weight: 700;
+        margin-top: 60px;
+        display: block;
+        align-items: center;
+        text-align: center;
+        width: 250px;
+        height: 60px;
+        border-radius: 25px;
+        background-color: rgb(255, 255, 255);
+        border: none;   
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    button:hover {
+        transform: scale(1.5);
+        background-color: rgb(240, 240, 240);
+    }
+
+    .user-img {
+        width: 300px;
+        height: 200px;
+        background-size: cover;
+    }
+
+    .select-img {
+        margin: 10px;
+        width: 250px;
+        height: 200px;
+        position: relative;
+        overflow: hidden;
+        float: left;
+        margin-top: 40px;
+    }
+
+    .select-img>.background {
+        background-color: rgba(124, 124, 124, 0.5);
+        position: absolute;
+        font-size: 2em;
+        text-align: center;
+        line-height: 5em;
+        color: aliceblue;
+        width: 250px;
+        height: 200px;
+        transition: all 0.5s;
+        transform: translateY(240px);
+    }
+
+    .select-box {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .select-img.selected>.background {
+        transform: translateY(0px);
+    }
+
+    .main{
+        margin-bottom: 20px;
+    }
+
+    .main>.a {
+        transition: all 2s ease-in-out;
+    }
+
+    .framebox {
+        display: flex;
+        float: left;
+        margin-left: 100px;
+        top: -60px;
+        position: relative;
+    }
+
+    .selected-frame {
+        height: 750px;
+    }
+
+    .container{
+        top: 20px;
+    }
+
+    @media screen and (max-width: 1000px){
+        .framebox{
+            display: none;
+        }
+        .selected-frame{
+            display: none;
+        }
+        .welcome{
+            margin: 0;
+            margin-top: 20px;
+        }
+        .main{
+            margin: 0;
+        }
+        button{
+            margin-bottom: 80px;
+        }
+        
+    }
+    
+    
+</style>
+<style>
+
+</style>
+
+<body>
+    <nav>
+        <p class="home">
+            Together WEB - <a>연결 시도중<a>
+        </p>
+    </nav>
+    <div class="welcome">
+        사진을 골라주세요!
+    </div>
+    <div class="main">
+        <a></a>개 사진 선택됨
+    </div>
+    <div class="container">
+
+        <div class="framebox"><img class="selected-frame"></div>
+        
+        <div class="select-box">
+            <div class="select-img" indexid="1">
+                <div class="background"></div>
+                <img class="user-img">
+            </div>
+            <div class="select-img" indexid="2">
+                <div class="background"></div>
+                <img class="user-img">
+            </div>
+        <div class="select-img" indexid="3">
+            <div class="background"></div>
+            <img class="user-img">
+        </div>
+        <div class="select-img" indexid="4">
+            <div class="background"></div>
+            <img class="user-img">
+        </div>
+        <div class="select-img" indexid="5">
+            <div class="background"></div>
+            <img class="user-img">
+        </div>
+        <div class="select-img" indexid="5">
+            <div class="background"></div>
+            <img class="user-img">
+        </div>
+        <div class="select-img" indexid="6">
+            <div class="background"></div>
+            <img class="user-img">
+        </div>
+        <div class="select-img" indexid="7">
+            <div class="background"></div>
+            <img class="user-img">
+        </div>
+        <div class="select-img" indexid="8">
+            <div class="background"></div>
+            <img class="user-img">
+        </div>
+        <div class="select-img" indexid="9">
+            <div class="background"></div>
+            <img class="user-img">
+        </div>
+    </div>
+    <button onclick="nextPage();">
+        확정하기
+    </button>
+</div>
+</body>
+
+</html>
+<script>
+    let selectedCount = 0;
+    const pic_id = getCookie('PicID');
+    const anchor = document.querySelector('.main > a');
+    anchor.textContent = selectedCount;
+    const userImgs = document.querySelectorAll('.user-img');
+    const selectImgs = document.querySelectorAll(".select-img");
+    const backgrounds = document.querySelectorAll(".background");
+
+    let selectedImgs = [];
+
+    function getCookie(name) {
+        const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        if (match) {
+            return match[2];
+        }
+        return null;
+    }
+    function updateCounts() {
+        selectedCount = 0;
+        selectedImgs.forEach(function (e, i) {
+            e.children[0].innerText = i + 1;
+            selectedCount++;
+        });
+        anchor.innerText = selectedCount;
+    }
+    // 모든 이미지에 사진 넣기
+    userImgs.forEach(function (img, index) {
+        img.src = `/gateway/cdn/image/${pic_id}-${index}`;
+    });
+    selectImgs.forEach(function (e) {
+        e.addEventListener("click", function () {
+            if (selectedImgs.includes(e)) {
+                selectedImgs = selectedImgs.filter(img => img !== e);
+                e.classList.remove("selected");
+            } else {
+                if (!(selectedCount == 4)) {
+                    selectedImgs.push(e);
+                    e.classList.add("selected");
+                }
+            }
+            updateCounts();
+        });
+    });
+    function nextPage() {
+        if (selectedCount == 4) {
+            let imginfo = []; //선택한 사진 순서 가져옴
+            selectedImgs.forEach((element, index) => {
+                imginfo[index] = element.getAttribute("indexid");
+            });
+
+            //신규 쿠키 추가
+            const expires = new Date();
+            document.cookie = `Selected-Pic-ID=${imginfo};expires=0;path=/`;
+            const frameInfo = (savedFrameSrc.split("/")[5].split('-', 6)[5]);
+            document.cookie = `Frame-Info=${frameInfo};expires=0;path=/`;
+            window.location.replace('./finished.html');
+        } else {
+            var target = document.querySelector('button');
+            target.textContent = "사진을 4개 선택해 주세요";
+            target.style.backgroundColor = "red";
+            setTimeout(() => {
+                var target = document.querySelector('button');
+                target.textContent = "확정하기";
+                target.style.backgroundColor = " rgb(150, 150, 150)";
+            }, 1000);
+        }
+    }
+
+    fetch('/gateway/', {
+        credentials: 'include'
+    })
+        .then(response => {
+            if (response.ok) {
+                const anchor = document.querySelector('.home > a');
+                anchor.style.color = 'green';
+                anchor.textContent = '서비스 서버 연결됨';
+            } else {
+                console.error('서버 연결 실패');
+            }
+        })
+        .catch(error => {
+            const anchor = document.querySelector('.home > a');
+            anchor.style.color = 'red';
+            anchor.textContent = 'NANU-JP2 연결 실패';
+        });
+
+    //사전에 선택된 이미지 로드
+    const savedFrameSrc = getCookie('frame');
+    if (savedFrameSrc) {
+        document.querySelectorAll('.selected-frame').forEach(img => {
+            img.src = savedFrameSrc;
+        });
+    }
+</script>
