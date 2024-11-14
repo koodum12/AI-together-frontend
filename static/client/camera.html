@@ -9,211 +9,167 @@
 </head>
 <style>
   @font-face {
-    font-family: 'MinSans-Regular';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/MinSans-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+      font-family: 'MinSans-Regular';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/MinSans-Regular.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
   }
-
+  
   * {
-    font-family: 'MinSans-Regular';
-    margin: 0 auto;
-    color: white;
+      font-family: 'MinSans-Regular';
+      margin: 0 auto;
+      color: white;
   }
-
+  
   body {
-    transition: all 0.5s ease-in-out;
-    background-color: black;
+      transition: all 0.5s ease-in-out;
+      background-color: black;
   }
-
+  
   .fade-out {
-    animation: fadeOut 1s forwards;
+      animation: fadeOut 1s forwards;
   }
-
+  
   @keyframes fadeOut {
-    0% {
-      opacity: 1;
-    }
-
-    100% {
-      opacity: 0;
-    }
+      0% { opacity: 1; }
+      100% { opacity: 0; }
   }
-
+  
   nav {
-    background-color: rgb(0, 0, 0);
-    color: rgb(255, 255, 255);
-    height: 40px;
+      background-color: rgb(0, 0, 0);
+      color: rgb(255, 255, 255);
+      height: 40px;
   }
-
+  
   nav>p {
-    line-height: 40px;
-    margin-left: 20px;
-    text-align: left;
+      line-height: 40px;
+      margin-left: 20px;
+      text-align: left;
   }
-
+  
   .home>li {
-    text-align: right;
+      text-align: right;
   }
-
+  
   .home>a {
-    color: rgb(255, 129, 129);
+      color: rgb(255, 129, 129);
   }
-
+  
   .welcome {
-    margin: 0;
-    text-align: center;
-    font-size: 3em;
+      margin: 0;
+      text-align: center;
+      font-size: 3em;
   }
-
+  
   .welcome>p {
-    font-size: 0.8em;
-    margin: 0 0;
+      font-size: 0.8em;
+      margin: 0 0;
   }
-
+  
   .main {
-    text-align: center;
-    margin: 0;
-    background-color: black;
+      text-align: center;
+      margin: 0;
+      background-color: black;
   }
-
+  
   button {
-    font-family: 'MinSans-Regular';
-    font-size: 1.8em;
-    margin-top: 20px;
-    display: block;
-    align-items: center;
-    text-align: center;
-    width: 280px;
-    height: 70px;
-    border-radius: 35px;
-    background-color: rgb(255, 85, 85);
-    border: none;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    cursor: pointer;
-  }
-
-  button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
-    background-color: rgb(255, 100, 100);
-  }
-
-  .camera-box {
-    margin: 0;
-    height: 70vh;
-    transform: scale(-1, 1);
-  }
-
-  .ping {
-    color: rgb(80, 80, 80);
-  }
-
-  .photo-count {
-    font-size: 2em;
-  }
-
-  .container {
-    position: relative;
-    padding: 20px;
-  }
-
-  #info {
-    margin-bottom: 20px;
-  }
-
-  @media screen and (max-width: 1000px) {
-    .main {
-      display: none;
-    }
-
-    .container {
-      padding: 10px;
-    }
-
-    .main {
-      display: none;
-    }
-
-    button {
-      font-family: 'pretandard-regular';
-      width: 90%;
-      max-width: 400px;
-      height: 100px;
-      font-size: 2.5em;
-      margin-top: 50vh;
-      transform: translateY(-50%);
-      border-radius: 50px;
-      background-color: rgb(74, 74, 74);
-      display: flex;
-      justify-content: center;
+      font-family: 'MinSans-Regular';
+      font-size: 1.8em;
+      margin-top: 20px;
+      display: block;
       align-items: center;
-      margin-bottom: 20px;
-    }
-
-    button p {
-      margin-bottom: 20px;
-    }
-
-    button:hover {
+      text-align: center;
+      width: 280px;
+      height: 70px;
+      border-radius: 35px;
+      background-color: rgb(255, 85, 85);
+      border: none;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+  }
+  
+  button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
       background-color: rgb(255, 100, 100);
-    }
-
-    .welcome {
-      font-size: 2.5em;
-    }
-
-    #info {
-      margin-bottom: 10px;
-    }
-
-    .explain,
-    nav,
-    .ping {
-      display: none;
-    }
-
-    .welcome {
-      margin-top: 40px;
-    }
   }
-
-  .preview-container {
-    position: fixed;
-    top: 50px;
-    right: 20px;
-    z-index: 1000;
+  
+  .camera-box {
+      margin: 0;
+      height: 70vh;
+      transform: scale(-1, 1);
   }
-
-  .camera-preview {
-    width: 240px;
-    height: 135px;
-    background-color: #333;
-    border-radius: 8px;
-    overflow: hidden;
-    transform: scale(-1, 1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  
+  .ping {
+      color: rgb(80, 80, 80);
   }
-
-  .camera-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  
+  .photo-count {
+      font-size: 2em;
   }
-
+  
+  .container {
+      position: relative;
+      padding: 20px;
+  }
+  
+  #info {
+      margin-bottom: 20px;
+  }
+  
   @media screen and (max-width: 1000px) {
-    .preview-container {
-      top: 10px;
-      right: 10px;
-    }
-
-    .camera-preview {
-      width: 160px;
-      height: 90px;
-    }
+      .main{
+          display: none;
+      }
+      .container {
+          padding: 10px;
+      }
+  
+      .main {
+          display: none;
+      }
+  
+      button {
+          font-family: 'pretandard-regular';
+          width: 90%;
+          max-width: 400px;
+          height: 100px;
+          font-size: 2.5em;
+          margin-top: 50vh;
+          transform: translateY(-50%);
+          border-radius: 50px;
+          background-color: rgb(74, 74, 74);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+      }
+  
+      button p{
+          margin-bottom: 20px;
+      }
+  
+      button:hover {
+          background-color: rgb(255, 100, 100);
+      }
+  
+      .welcome {
+          font-size: 2.5em;
+      }
+  
+      #info {
+          margin-bottom: 10px;
+      }
+  
+      .explain , nav , .ping{
+          display: none;
+      }
+      .welcome{
+          margin-top: 40px;
+      }
   }
-</style>
+  </style>
 
 <body id="body">
 
@@ -341,7 +297,7 @@ socket.on('connect', () => {
 socket.on('disconnect', () => {
   console.log('disconnected');
 });
-var pic_count = 10;
+var pic_count = 5;
 const picAnchor = document.querySelector('.photo-count');
 const body = document.querySelector('body');
 picAnchor.textContent = pic_count;
