@@ -1,192 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Together</title>
   <script src="https://cdn.socket.io/4.8.0/socket.io.min.js" integrity="sha384-OoIbkvzsFFQAG88r+IqMAjyOtYDPGO0cqK5HF5Uosdy/zUEGySeAzytENMDynREd" crossorigin="anonymous"></script>
 </head>
+
 <style>
   @font-face {
-      font-family: 'MinSans-Regular';
-      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/MinSans-Regular.woff') format('woff');
-      font-weight: normal;
-      font-style: normal;
+    font-family: 'MinSans-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/MinSans-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
   }
-  
+
   * {
-      font-family: 'MinSans-Regular';
-      margin: 0 auto;
-      color: white;
+    font-family: 'MinSans-Regular';
+    margin: 0 auto;
+    color: white;
   }
-  
+
   body {
-      transition: all 0.5s ease-in-out;
-      background-color: black;
+    transition: all 0.5s ease-in-out;
+    background-color: black;
   }
-  
+
   .fade-out {
-      animation: fadeOut 1s forwards;
+    animation: fadeOut 1s forwards;
   }
-  
+
   @keyframes fadeOut {
-      0% { opacity: 1; }
-      100% { opacity: 0; }
+    0% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+    }
   }
-  
+
   nav {
-      background-color: rgb(0, 0, 0);
-      color: rgb(255, 255, 255);
-      height: 40px;
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    height: 40px;
   }
-  
+
   nav>p {
-      line-height: 40px;
-      margin-left: 20px;
-      text-align: left;
+    line-height: 40px;
+    margin-left: 20px;
+    text-align: left;
   }
-  
+
   .home>li {
-      text-align: right;
+    text-align: right;
   }
-  
+
   .home>a {
-      color: rgb(255, 129, 129);
+    color: rgb(255, 129, 129);
   }
-  
+
   .welcome {
-      margin: 0;
-      text-align: center;
-      font-size: 3em;
+    margin: 0;
+    text-align: center;
+    font-size: 3em;
   }
-  
+
   .welcome>p {
-      font-size: 0.8em;
-      margin: 0 0;
+    font-size: 0.8em;
+    margin: 0 0;
   }
-  
+
   .main {
-      text-align: center;
-      margin: 0;
-      background-color: black;
+    width: 100%;
+    height: 70vh;
+    background-size: cover;
+    transform: scale(-1, 1);
+    margin: 0;
   }
-  
+
+  #main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
   button {
-      font-family: 'MinSans-Regular';
-      font-size: 1.8em;
-      margin-top: 20px;
-      display: block;
-      align-items: center;
-      text-align: center;
-      width: 280px;
-      height: 70px;
-      border-radius: 35px;
-      background-color: rgb(255, 85, 85);
-      border: none;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
-      cursor: pointer;
+    font-family: 'MinSans-Regular';
+    font-size: 1.8em;
+    margin-top: 20px;
+    display: block;
+    align-items: center;
+    text-align: center;
+    width: 280px;
+    height: 70px;
+    border-radius: 35px;
+    background-color: rgb(255, 85, 85);
+    border: none;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
   }
-  
+
   button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
-      background-color: rgb(255, 100, 100);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
+    background-color: rgb(255, 100, 100);
   }
-  
+
   .camera-box {
-      margin: 0;
-      height: 70vh;
-      transform: scale(-1, 1);
+    margin: 0;
+    height: 70vh;
+    transform: scale(-1, 1);
   }
-  
+
   .ping {
-      color: rgb(80, 80, 80);
+    color: rgb(80, 80, 80);
   }
-  
+
   .photo-count {
-      font-size: 2em;
+    font-size: 2em;
   }
-  
+
   .container {
-      position: relative;
-      padding: 20px;
+    position: relative;
+    padding: 20px;
   }
-  
+
   #info {
-      margin-bottom: 20px;
+    margin-bottom: 20px;
   }
-  
+
+  #video {
+    object-fit: cover;
+  }
+
   @media screen and (max-width: 1000px) {
-      .main{
-          display: none;
-      }
-      .container {
-          padding: 10px;
-      }
-  
-      .main {
-          display: none;
-      }
-  
-      button {
-          font-family: 'pretandard-regular';
-          width: 90%;
-          max-width: 400px;
-          height: 100px;
-          font-size: 2.5em;
-          margin-top: 50vh;
-          transform: translateY(-50%);
-          border-radius: 50px;
-          background-color: rgb(74, 74, 74);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-bottom: 20px;
-      }
-  
-      button p{
-          margin-bottom: 20px;
-      }
-  
-      button:hover {
-          background-color: rgb(255, 100, 100);
-      }
-  
-      .welcome {
-          font-size: 2.5em;
-      }
-  
-      #info {
-          margin-bottom: 10px;
-      }
-  
-      .explain , nav , .ping{
-          display: none;
-      }
-      .welcome{
-          margin-top: 40px;
-      }
+    .main {
+      display: none;
+    }
+
+    .container {
+      padding: 10px;
+    }
+
+    button {
+      font-family: 'pretandard-regular';
+      width: 90%;
+      max-width: 400px;
+      height: 100px;
+      font-size: 2.5em;
+      margin-top: 50vh;
+      transform: translateY(-50%);
+      border-radius: 50px;
+      background-color: rgb(74, 74, 74);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    button p {
+      margin-bottom: 20px;
+    }
+
+    button:hover {
+      background-color: rgb(255, 100, 100);
+    }
+
+    .welcome {
+      font-size: 2.5em;
+    }
+
+    #info {
+      margin-bottom: 10px;
+    }
+
+    .explain,
+    nav,
+    .ping {
+      display: none;
+    }
+
+    .welcome {
+      margin-top: 40px;
+    }
   }
-  </style>
 
+  .preview-container {
+    position: fixed;
+    top: 50px;
+    right: 20px;
+    z-index: 1000;
+  }
+
+  .camera-preview {
+    width: 480px;
+    height: 320px;
+    background-color: #333;
+    border-radius: 8px;
+    overflow: hidden;
+    transform: scale(-1, 1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .camera-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media screen and (max-width: 1000px) {
+    .preview-container {
+      top: 10px;
+      right: 10px;
+    }
+
+    .camera-preview {
+      width: 160px;
+      height: 90px;
+    }
+  }
+</style>
 <body id="body">
-
   <nav>
-    <p class="home">
-      Together WEB - <a>연결 시도중<a>
-    </p>
+    <p class="home">Together WEB - <a>연결 시도중<a></p>
   </nav>
   <div class="explain">Client v3. Server Ping</div><a class="ping">--</a>
   <div class="container">
     <div class="preview-container">
-        <div class="camera-preview"></div>
+      <div class="camera-preview">
+        <video id="video" width="480" height="320" autoplay></video>
+      </div>
     </div>
     <div class="welcome">
       <p id="info" style="font-size: 0.4em;"><a class="photo-count">0</a>장 남았습니다</p>
     </div>
     <div class="main">
+      <img id="main-img">
     </div>
     <button id="recordBtn">
       <p>📷</p>
@@ -195,298 +246,131 @@
 </body>
 
 </html>
+
 <script>
+  let fps = 2;
+  const factor = 1;
+  const mainImg = document.querySelector('#main-img');
+  
   const socket = io(`http://121.159.74.206:8888`, {
-  path: '/socket.io',
-  transports: ['websocket']
-});
-
-const send = async (event) => {
-  const getBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
+    path: '/socket.io',
+    transports: ['websocket']
+  });
+  
+  const send = async (dataURL) => {
+    try {
+      socket.emit('image', dataURL.split(',')[1]);
+      console.log('image sent');
+    } catch (error) {
+      console.error('Error sending image:', error);
+    }
   };
 
-  const compressImage = (img, maxWidth, maxHeight, quality = 0.7) => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-
-    const scaleFactor = Math.min(maxWidth / img.width, maxHeight / img.height, 1);
-    const width = img.width * scaleFactor;
-    const height = img.height * scaleFactor;
-
-    canvas.width = width;
-    canvas.height = height;
-
-    ctx.drawImage(img, 0, 0, width, height);
-
-    return canvas.toDataURL('image/jpeg', quality);
-  };
-
-  try {
-    const file = event.target.files[0];
-
-    if (file.size > 5 * 1024) {
-      const image = await getBase64(file);
-      const img = new Image();
-      img.onload = () => {
-        let compressedImage = compressImage(img, 1024, 1024, 0.7);
-        
-        let compressedSize = (compressedImage.length * 3 / 4) / 1024 / 1024;
-        while (compressedSize > 2) {
-          compressedImage = compressImage(img, 1024, 1024, 0.6); 
-          compressedSize = (compressedImage.length * 3 / 4) / 1024 / 1024;
-        }
-
-        socket.emit('image', compressedImage.slice(23));
-        console.log('Compressed image sent');
-      };
-      img.src = image;
-    } else {
-      const image = await getBase64(file);
-      socket.emit('image', image.slice(23));
-    }
-  } catch (error) {
-    console.error('파일 변환 중 오류 발생:', error);
-  }
-};
-
-
-socket.on('image', (data) => {
-  const videoContainer = document.querySelector('.main');
-  const existingMainImg = videoContainer.querySelector('img');
-  if (existingMainImg) {
-    existingMainImg.remove();
-  }
-  
-  const mainImg = document.createElement('img');
-  mainImg.src = 'data:image/png;base64,' + data['image'];
-  mainImg.style.width = '100%';
-  mainImg.style.height = '70vh';
-  mainImg.style.objectFit = 'cover';
-  mainImg.style.transform = 'scale(-1, 1)';
-  
-  videoContainer.appendChild(mainImg);
-
-  const previewContainer = document.querySelector('.camera-preview');
-  const existingPreviewImg = previewContainer.querySelector('img');
-  if (existingPreviewImg) {
-    existingPreviewImg.remove();
-  }
-  
-  const previewImg = document.createElement('img');
-  previewImg.src = 'data:image/png;base64,' + data['image'];
-  previewImg.style.width = '100%';
-  previewImg.style.height = '100%';
-  previewImg.style.objectFit = 'cover';
-  
-  previewContainer.appendChild(previewImg);
-});
-
-socket.on('connect', () => {
-  console.log('connected');
-  socket.emit('register', { role: 'monitor' });
-  console.log('register client as monitor');
-  socket.emit('filter', 10);
-  console.log('set filter: 10');
-});
-socket.on('disconnect', () => {
-  console.log('disconnected');
-});
-var pic_count = 5;
-const picAnchor = document.querySelector('.photo-count');
-const body = document.querySelector('body');
-picAnchor.textContent = pic_count;
-
-const expires = new Date();
-const value = Math.floor(10000 + Math.random() * 90000);
-const name = 'PicID';
-document.cookie = `${name}=${value};expires=0;path=/`;
-
-fetch('/gateway')
-  .then(response => response.json())
-  .then(data => {
-    const pingValue = (Date.now() - data.ping) / 10;
-    const pingElement = document.querySelector('.ping');
-    pingElement.textContent = `${pingValue}ms`;
-  })
-  .catch(error => {
-    console.log('API 호출 중 오류 발생:', error);
+  socket.on('image', (data) => {
+    console.log('image receved');
+    mainImg.src = 'data:image/png;base64,' + data['image'];
   });
 
-fetch('/gateway', {
-  credentials: 'include'
-})
-  .then(response => {
-    if (response.ok) {
-      const anchor = document.querySelector('.home > a');
-      anchor.style.color = 'green';
-      anchor.textContent = '서비스 서버 연결됨';
-    } else {
-      console.error('서버 연결 실패');
-    }
-  })
-  .catch(error => {
-    const anchor = document.querySelector('.home > a');
-    anchor.style.color = 'red';
-    anchor.textContent = 'NANU-JP2 연결 실패';
-  });
-
-let mediaRecorder;
-let recordedChunks = [];
-let frameInterval;
-
-const recordButton = document.getElementById('recordBtn');
-let capture_on = true;
-
-let globalStream;
-
-navigator.mediaDevices.getUserMedia({ video: true })
-  .then(stream => {
-    globalStream = stream;
-    const videoTrack = stream.getVideoTracks()[0];
-    const settings = videoTrack.getSettings();
-    
+  socket.on('connect', () => {
+    console.log('connected');
+    const connection = document.querySelector('.home > a');
+    connection.textContent = '연결됨';
+    connection.style.color = 'green';
+    socket.emit('register', { role: 'monitor' });
+    console.log('register as monitor');
+    socket.emit('filter', 4);
+    console.log('set filter: 4');
     frameInterval = setInterval(() => {
       if (capture_on) {
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        
-        canvas.width = 1280;
-        canvas.height = 720;
-        
-        const tempVideo = document.createElement('video');
-        tempVideo.srcObject = globalStream;
-        tempVideo.play();
-        
-        context.drawImage(tempVideo, 0, 0, canvas.width, canvas.height);
-        
-        canvas.toBlob(blob => {
-          const event = { target: { files: [blob] } };
-          send(event);
-        }, 'image/jpeg', 0.7);
+        captureImage();
       }
-    }, 100);
-
-    mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.ondataavailable = event => {
-      if (event.data.size > 0) {
-        recordedChunks.push(event.data);
-      }
-    };
-
-    mediaRecorder.onstop = () => {
-      capture_on = false;
-      const blob = new Blob(recordedChunks, {
-        type: 'video/mp4'
-      });
-      recordedChunks = [];
-      uploadVideo(blob);
-      picAnchor.style.color = 'white';
-      picAnchor.textContent = pic_count;
-
-      if (pic_count === 0) {
-        document.body.classList.add('fade-out');
-        setTimeout(function () {
-          location.href = './photo-select.html';
-        }, 1000);
-      }
-    };
-    mediaRecorder.start();
-  })
-  .catch(error => {
-    const anchor = document.querySelector('.home > a');
-    console.error('미디어 디바이스 접속 중 오류 발생', error);
-    anchor.style.color = 'red';
-    anchor.textContent = '카메라 오류 발생!';
+    }, 1000 / fps);
   });
 
-window.addEventListener('beforeunload', () => {
-  if (frameInterval) {
-    clearInterval(frameInterval);
-  }
-});
+  socket.on('disconnect', () => {
+    console.log('disconnected');
+  });
 
-recordButton.addEventListener('click', startRecording);
-
-document.addEventListener('keydown', function (event) {
-  if (event.key == 'Enter') {
-    if (capture_on) {
-      startRecording();
-    }
-  }
-});
-
-function startRecording() {
-  body.style.backgroundColor = 'white';
-  recordButton.style.display = 'none';
-  captureImage();
-  mediaRecorder.stop();
-
-  pic_count--;
-
-  picAnchor.style.color = 'white';
+  let pic_count = 10;
+  const picAnchor = document.querySelector('.photo-count');
   picAnchor.textContent = pic_count;
-  setTimeout(() => {
-    body.style.backgroundColor = 'black';
-  }, 1000);
-}
-function captureImage() {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-  
-  canvas.width = 1280;
-  canvas.height = 720;
 
-  // 임시 비디오 엘리먼트 생성 및 현재 프레임 캡처
-  const tempVideo = document.createElement('video');
-  tempVideo.srcObject = globalStream;
-  tempVideo.play();
-  
-  context.drawImage(tempVideo, 0, 0, canvas.width, canvas.height);
+  const captureImage = () => {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    const video = document.getElementById('video');
 
-  canvas.toBlob(blob => {
-    uploadImage(blob);
-  }, 'image/png');
-}
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
 
-function uploadImage(blob) {
-  const formData = new FormData();
-  formData.append('image', blob, `${pic_count}-img.png`);
+    context.drawImage(video, 0, 0, canvas.width * factor, canvas.height * factor);
 
-  fetch('/gateway/media/image', {
-    method: 'POST',
-    body: formData,
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Image uploaded successfully:', data);
-    })
-    .catch(error => {
-      console.error('Error uploading image:', error);
-    });
-}
+    const dataURL = canvas.toDataURL('image/png');
+    
+    send(dataURL);
+  };
 
-function uploadVideo(blob) {
-  const formData = new FormData();
-  formData.append('video', blob, `${pic_count}-vid.mp4`);
-  fetch('/gateway/media/upload', {
-    method: 'POST',
-    body: formData,
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Video uploaded successfully:', data);
-      capture_on = true;
-      recordButton.style.display = 'block';
+  let mediaRecorder;
+  let recordedChunks = [];
+  let frameInterval;
+
+  const recordButton = document.getElementById('recordBtn');
+  let capture_on = true;
+  let globalStream;
+
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      globalStream = stream;
+      const videoTrack = stream.getVideoTracks()[0];
+      const settings = videoTrack.getSettings();
+
+      const videoElement = document.getElementById('video');
+      videoElement.srcObject = stream;
+      videoElement.play();
+
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = event => {
+        if (event.data.size > 0) {
+          recordedChunks.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        capture_on = false;
+        const blob = new Blob(recordedChunks, {
+          type: 'video/mp4'
+        });
+        recordedChunks = [];
+        uploadVideo(blob);
+
+        pic_count--;
+        picAnchor.textContent = pic_count;
+
+        if (pic_count === 0) {
+          document.body.classList.add('fade-out');
+          setTimeout(() => {
+            location.href = './photo-select.html';
+          }, 1000);
+        }
+      };
       mediaRecorder.start();
     })
     .catch(error => {
-      console.error('Error uploading video:', error);
+      console.error('Error accessing media devices:', error);
     });
-}
+
+  recordButton.addEventListener('click', startRecording);
+
+  function startRecording() {
+    if (pic_count < 1) {
+      return;
+    }
+    capture_on = true;
+    picAnchor.textContent = pic_count;
+    mediaRecorder.stop();
+  }
+
+  function uploadVideo(blob) {
+    alert('아직 구현안됨');
+  }
 </script>
