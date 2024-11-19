@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,6 +58,18 @@
 
   .home>a {
     color: rgb(255, 129, 129);
+  }
+
+  #flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
   }
 
   .welcome {
@@ -223,6 +235,7 @@
   }
 </style>
 <body id="body">
+  <div id="flash"></div>
   <nav>
     <p class="home">Together WEB - <a>연결 시도중<a></p>
   </nav>
@@ -233,9 +246,13 @@
         <video id="video" width="480" height="320" autoplay></video>
       </div>
     </div>
+
+    <!--
     <div class="welcome">
       <p id="info" style="font-size: 0.4em;"><a class="photo-count">0</a>장 남았습니다</p>
     </div>
+    -->
+
     <div class="main">
       <img id="main-img">
     </div>
@@ -248,11 +265,13 @@
 </html>
 
 <script>
-  let fps = 2;
+  let fps = 5;
   const factor = 1;
+  let capture_on = true;
+  let frameInterval;
   const mainImg = document.querySelector('#main-img');
   
-  const socket = io(`http://121.159.74.206:8888`, {
+  const socket = io(`http://192.168.1.26:8888`, {
     path: '/socket.io',
     transports: ['websocket']
   });
@@ -266,34 +285,65 @@
     }
   };
 
+  let globalDataUrl;
+  const flash = document.getElementById("flash");
+  const recordButton = document.getElementById('recordBtn');
+  recordButton.addEventListener('click', send_last_img);
+
+  function send_last_img() {
+    console.log('click');
+    send_last();
+
+    flash.style.opacity = "1";
+    setTimeout(() => {
+      flash.style.opacity = "0"
+    }, 200);
+  };
+
+  
+
+  const send_last = async () => {
+    try {
+      socket.emit('result', globalDataUrl.split(',')[1]);
+      console.log('result sent');
+    } catch (error) {
+      console.error('Error sending result:', error);
+    }
+  };
+
   socket.on('image', (data) => {
     console.log('image receved');
     mainImg.src = 'data:image/png;base64,' + data['image'];
   });
 
-  socket.on('connect', () => {
-    console.log('connected');
-    const connection = document.querySelector('.home > a');
-    connection.textContent = '연결됨';
-    connection.style.color = 'green';
-    socket.emit('register', { role: 'monitor' });
-    console.log('register as monitor');
-    socket.emit('filter', 4);
-    console.log('set filter: 4');
-    frameInterval = setInterval(() => {
-      if (capture_on) {
-        captureImage();
-      }
-    }, 1000 / fps);
-  });
+  // QR 이미지 수신
+  socket.on("QR", (data) => {
+            console.log("Received QR Code");
+            console.log(data)
 
-  socket.on('disconnect', () => {
-    console.log('disconnected');
-  });
-
-  let pic_count = 10;
-  const picAnchor = document.querySelector('.photo-count');
-  picAnchor.textContent = pic_count;
+            // 새 창 열기
+            const popup = window.open("", "_blank", "width=300,height=350");
+            if (popup) {
+                // 새 창에 이미지 삽입
+                popup.document.write(`
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>QR Code</title>
+                    </head>
+                    <body style="text-align:center; margin:0;">
+                        <img src="${'data:image/png;base64,'}${data['image']}" alt="QR Code" style="max-width:100%; height:auto;">
+                    </body>
+                    </html>
+                `);
+                popup.moveTo(screen.availWidth/2 - 150, screen.availHeight/2 - 225);
+                popup.document.close(); // 새 창 표시
+            } else {
+                alert("팝업 차단이 활성화되어 있습니다. 팝업을 허용해주세요.");
+            }
+        });
 
   const captureImage = () => {
     const canvas = document.createElement('canvas');
@@ -306,16 +356,49 @@
     context.drawImage(video, 0, 0, canvas.width * factor, canvas.height * factor);
 
     const dataURL = canvas.toDataURL('image/png');
-    
+    globalDataUrl = dataURL;
+
     send(dataURL);
+    
   };
 
+
+  socket.on('connect', () => {
+    console.log('connected');
+    const connection = document.querySelector('.home > a');
+    connection.textContent = '연결됨';
+    connection.style.color = 'green';
+    socket.emit('register', { role: 'monitor' });
+    console.log('register as monitor');
+    socket.emit('filter', 3);
+    console.log('set filter: 3');
+    frameInterval = setInterval(() => {
+      if (capture_on) {
+        captureImage();
+      }
+    }, 1000 / fps);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('disconnected');
+  });
+
+  
+
+  let pic_count = 10;
+  /*
+  const picAnchor = document.querySelector('.photo-count');
+  picAnchor.textContent = pic_count;
+  */
+  
+
+ 
   let mediaRecorder;
   let recordedChunks = [];
-  let frameInterval;
+  
 
-  const recordButton = document.getElementById('recordBtn');
-  let capture_on = true;
+  
+  
   let globalStream;
 
   navigator.mediaDevices.getUserMedia({ video: true })
@@ -344,7 +427,7 @@
         uploadVideo(blob);
 
         pic_count--;
-        picAnchor.textContent = pic_count;
+        //picAnchor.textContent = pic_count;
 
         if (pic_count === 0) {
           document.body.classList.add('fade-out');
@@ -359,8 +442,8 @@
       console.error('Error accessing media devices:', error);
     });
 
-  recordButton.addEventListener('click', startRecording);
-
+  
+  /*
   function startRecording() {
     if (pic_count < 1) {
       return;
@@ -372,5 +455,5 @@
 
   function uploadVideo(blob) {
     alert('아직 구현안됨');
-  }
+  }*/
 </script>
